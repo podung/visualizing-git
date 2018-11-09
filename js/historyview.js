@@ -1447,6 +1447,12 @@ define(['d3'], function() {
       var origBranch = this.currentBranch
       var origRef = origBranch || origHeadCommit.id
 
+      if (this.isAncestorOf(origHeadCommit.id, targetCommit.id)) {
+        this.deleteBranch('ORIG_HEAD');
+        this.fastForward(targetCommit);
+        return 'Fast-Forward';
+      }
+
       this.checkout(targetCommit.id)
       this.addReflogEntry(
         'HEAD', targetCommit.id, 'rebase: checkout ' + ref
